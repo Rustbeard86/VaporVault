@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36121.58 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaporVault.Core", "VaporVault.Core\VaporVault.Core.csproj", "{D66E79B2-B112-4EE1-981F-BADE4CE67E22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaporVault.Core.Tests", "VaporVault.Core.Tests\VaporVault.Core.Tests.csproj", "{6BD695BF-FA3D-4E3A-B3E3-90330B745A93}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D66E79B2-B112-4EE1-981F-BADE4CE67E22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D66E79B2-B112-4EE1-981F-BADE4CE67E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D66E79B2-B112-4EE1-981F-BADE4CE67E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D66E79B2-B112-4EE1-981F-BADE4CE67E22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BD695BF-FA3D-4E3A-B3E3-90330B745A93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BD695BF-FA3D-4E3A-B3E3-90330B745A93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BD695BF-FA3D-4E3A-B3E3-90330B745A93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BD695BF-FA3D-4E3A-B3E3-90330B745A93}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E5C29C4C-1AED-4FE2-B2E8-19444D13FD28}
+	EndGlobalSection
+EndGlobal

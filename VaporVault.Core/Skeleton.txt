@@ -1,0 +1,53 @@
+﻿VaporVault.Core/
+│
+├── VaporVault.Core.csproj
+│
+├── Abstractions/               # Interfaces & base contracts
+│   ├── ISteamCmdService.cs
+│   ├── ICompressionService.cs
+│   ├── IBackupTemplateService.cs
+│   ├── IAcfParser.cs
+│   ├── IFileSystemService.cs
+│   ├── IWorkshopArchiver.cs
+│   └── (other interfaces as needed)
+│
+├── SteamCmd/                   # Implementation: SteamCMD operations
+│   ├── SteamCmdService.cs
+│   ├── SteamCmdResult.cs
+│   └── (helpers/utilities)
+│
+├── Compression/                # Compression/archiving implementations
+│   ├── CompressionService.cs
+│   ├── CompressionOptions.cs
+│   └── (additional strategies, e.g., Zip, 7z, etc.)
+│
+├── BackupTemplates/            # Template/report generation
+│   ├── BackupTemplateService.cs
+│   ├── TemplateModel.cs
+│   └── (renderers/parsers, etc.)
+│
+├── FileSystem/                 # File & directory operations
+│   ├── FileSystemService.cs
+│   ├── FileMetadata.cs
+│   └── (helpers/utilities)
+│
+├── Acf/                        # ACF parsing and modification
+│   ├── AcfParser.cs
+│   ├── AcfFile.cs
+│   └── (helpers)
+│
+├── Workshop/                   # Workshop-related functionality (future-proof)
+│   ├── WorkshopArchiver.cs
+│   └── (models/helpers)
+│
+├── Common/                     # Shared models, exceptions, utilities
+│   ├── VaporVaultException.cs
+│   ├── OperationResult.cs
+│   ├── Logger.cs (optional, or use Microsoft.Extensions.Logging)
+│   └── (extension methods, constants, etc.)
+│
+├── Resources/                  # Embedded templates, config defaults
+│   └── (any resource files)
+│
+└── VaporVault.Core.Tests/      # (Recommended: Separate test project for core)
+    └── (unit/integration tests)
