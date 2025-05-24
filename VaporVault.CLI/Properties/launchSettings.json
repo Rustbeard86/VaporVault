@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "VaporVault.CLI": {
+      "commandName": "Project",
+      "commandLineArgs": "steamcmd install"
+    }
+  }
+}

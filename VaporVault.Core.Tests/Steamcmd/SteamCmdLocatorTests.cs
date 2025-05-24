@@ -92,16 +92,16 @@ public class SteamCmdLocatorIntegrationTests : IDisposable
 
         // Create validator for integration tests
         var validator = new SteamCmdValidator(
-            new SteamCmd.Infrastructure.FileSystem(),
+            new Core.SteamCmd.Infrastructure.FileSystem(),
             new PlatformService(),
             new LoggingValidationEventHandler(NullLogger.Instance));
 
         _sut = new SteamCmdLocator(
             NullLogger<SteamCmdLocator>.Instance,
-            new SteamCmd.Infrastructure.FileSystem(),
+            new Core.SteamCmd.Infrastructure.FileSystem(),
             new PlatformService(),
             new HttpDownloadService(),
-            validator, // Add validator
+            validator,
             options);
     }
 
