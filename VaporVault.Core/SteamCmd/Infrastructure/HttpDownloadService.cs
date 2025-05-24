@@ -2,12 +2,7 @@
 
 public class HttpDownloadService : IHttpDownloadService
 {
-    private readonly HttpClient _httpClient;
-
-    public HttpDownloadService()
-    {
-        _httpClient = new HttpClient();
-    }
+    private readonly HttpClient _httpClient = new();
 
     public async Task DownloadFileAsync(string url, string destinationPath, CancellationToken cancellationToken)
     {

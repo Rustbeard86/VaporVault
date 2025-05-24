@@ -1,16 +1,7 @@
-﻿using VaporVault.CLI.Commands;
+﻿namespace VaporVault.CLI.Commands;
 
-namespace VaporVault.CLI;
-
-internal class App
+internal class App(IEnumerable<ICommand> commands)
 {
-    private readonly IEnumerable<ICommand> _commands;
-
-    public App(IEnumerable<ICommand> commands)
-    {
-        _commands = commands;
-    }
-
     public async Task RunAsync(string[] args)
     {
         Console.WriteLine("VaporVault CLI");
@@ -22,7 +13,8 @@ internal class App
             return;
         }
 
-        var command = _commands.FirstOrDefault(c => c.Name == args[0].ToLower());
+        var command = commands.FirstOrDefault(c =>
+            string.Equals(c.Name, args[0], StringComparison.OrdinalIgnoreCase));
         if (command == null)
         {
             Console.WriteLine($"Unknown command: {args[0]}");
@@ -32,7 +24,7 @@ internal class App
 
         try
         {
-            await command.ExecuteAsync(args.Skip(1).ToArray());
+            await command.ExecuteAsync(args[1..]);
         }
         catch (Exception ex)
         {
@@ -43,7 +35,7 @@ internal class App
     private void ShowHelp()
     {
         Console.WriteLine("\nAvailable commands:");
-        foreach (var command in _commands) Console.WriteLine($"  {command.Name,-12} - {command.Description}");
+        foreach (var command in commands) Console.WriteLine($"  {command.Name,-12} - {command.Description}");
         Console.WriteLine("  help         - Show this help message");
     }
 }

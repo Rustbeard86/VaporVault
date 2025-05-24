@@ -13,4 +13,10 @@ public interface ISteamCmdLocator
     ///     Gets the currently installed SteamCMD path if available.
     /// </summary>
     string? GetInstalledSteamCmdPath();
+
+    /// <summary>
+    ///     Checks if SteamCMD exists at the expected location without triggering downloads.
+    /// </summary>
+    /// <returns>The path to SteamCMD if it exists, null otherwise.</returns>
+    string? CheckForSteamCmd();
 }

@@ -1,18 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace VaporVault.Core.Common;
 
-namespace VaporVault.Core.Common
+public class OperationResult<T>
 {
-    public class OperationResult<T>
+    private OperationResult(bool success, T data, string errorMessage)
     {
-        public bool Success { get; }
-        public string ErrorMessage { get; }
-        public T Data { get; }
-
-        // ... constructors, static factory methods, etc.
+        Success = success;
+        Data = data;
+        ErrorMessage = errorMessage;
     }
 
+    public bool Success { get; }
+    public string ErrorMessage { get; }
+    public T Data { get; }
+
+    public static OperationResult<T> CreateSuccess(T data)
+    {
+        return new OperationResult<T>(true, data, string.Empty);
+    }
+
+    public static OperationResult<T> CreateFailure(string errorMessage)
+    {
+        return new OperationResult<T>(false, default!, errorMessage);
+    }
 }

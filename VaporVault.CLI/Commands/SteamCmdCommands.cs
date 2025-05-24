@@ -2,15 +2,8 @@
 
 namespace VaporVault.CLI.Commands;
 
-public class SteamCmdCommands : ICommand
+public class SteamCmdCommands(ISteamCmdLocator steamCmdLocator) : ICommand
 {
-    private readonly ISteamCmdLocator _steamCmdLocator;
-
-    public SteamCmdCommands(ISteamCmdLocator steamCmdLocator)
-    {
-        _steamCmdLocator = steamCmdLocator;
-    }
-
     public string Name => "steamcmd";
     public string Description => "Manage SteamCMD installation and configuration";
 
@@ -37,21 +30,40 @@ public class SteamCmdCommands : ICommand
         }
     }
 
-    private async Task ShowStatus()
+    private Task ShowStatus()
     {
-        var installedPath = _steamCmdLocator.GetInstalledSteamCmdPath();
+        // First check the cache
+        var installedPath = steamCmdLocator.GetInstalledSteamCmdPath();
+
+        // If not in cache, check the filesystem without triggering downloads
+        if (installedPath == null)
+        {
+            installedPath = steamCmdLocator.CheckForSteamCmd();
+        }
+
         Console.WriteLine("SteamCMD Status:");
         Console.WriteLine($"Installed: {(installedPath != null ? "Yes" : "No")}");
         if (installedPath != null) Console.WriteLine($"Location: {installedPath}");
+
+        return Task.CompletedTask;
     }
 
     private async Task Install()
     {
-        Console.WriteLine("Installing/Updating SteamCMD...");
         try
         {
-            var path = await _steamCmdLocator.EnsureSteamCmdAvailableAsync();
-            Console.WriteLine($"SteamCMD installed successfully at: {path}");
+            var path = await steamCmdLocator.EnsureSteamCmdAvailableAsync();
+            var wasExisting = steamCmdLocator.GetInstalledSteamCmdPath() == path;
+
+            if (wasExisting)
+            {
+                Console.WriteLine($"SteamCMD is already installed at: {path}");
+            }
+            else
+            {
+                Console.WriteLine("Installing SteamCMD...");
+                Console.WriteLine($"SteamCMD installed successfully at: {path}");
+            }
         }
         catch (Exception ex)
         {
@@ -59,7 +71,7 @@ public class SteamCmdCommands : ICommand
         }
     }
 
-    private void ShowHelp()
+    private static void ShowHelp()
     {
         Console.WriteLine("SteamCMD Commands:");
         Console.WriteLine("  status    - Show current SteamCMD installation status");

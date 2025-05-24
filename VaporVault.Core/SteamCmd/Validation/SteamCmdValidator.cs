@@ -6,22 +6,13 @@ using VaporVault.Core.SteamCmd.Validation.Events;
 
 namespace VaporVault.Core.SteamCmd.Validation;
 
-public class SteamCmdValidator : ISteamCmdValidator
+public class SteamCmdValidator(
+    IFileSystem fileSystem,
+    IPlatformService platformService,
+    IValidationEventHandler eventHandler)
+    : ISteamCmdValidator
 {
     private const string ComponentName = "SteamCmdValidator";
-    private readonly IValidationEventHandler _eventHandler;
-    private readonly IFileSystem _fileSystem;
-    private readonly IPlatformService _platformService;
-
-    public SteamCmdValidator(
-        IFileSystem fileSystem,
-        IPlatformService platformService,
-        IValidationEventHandler eventHandler)
-    {
-        _fileSystem = fileSystem;
-        _platformService = platformService;
-        _eventHandler = eventHandler;
-    }
 
     public async Task ValidateArchiveAsync(string archivePath, CancellationToken cancellationToken)
     {
@@ -36,7 +27,7 @@ public class SteamCmdValidator : ISteamCmdValidator
             RaiseEvent("Starting archive validation", properties: properties);
 
             // Add explicit file existence check
-            if (!_fileSystem.FileExists(archivePath))
+            if (!fileSystem.FileExists(archivePath))
             {
                 RaiseEvent("Archive file not found", LogLevel.Error, properties: properties);
                 throw new SteamCmdValidationException($"Archive file not found at {archivePath}");
@@ -49,7 +40,7 @@ public class SteamCmdValidator : ISteamCmdValidator
                 throw new SteamCmdValidationException("Unsupported archive format for SteamCMD");
             }
 
-            await using var stream = _fileSystem.OpenRead(archivePath);
+            await using var stream = fileSystem.OpenRead(archivePath);
             properties["FileSize"] = stream.Length;
 
             if (stream.Length == 0)
@@ -101,20 +92,20 @@ public class SteamCmdValidator : ISteamCmdValidator
         var properties = new Dictionary<string, object>
         {
             { "ExecutablePath", executablePath },
-            { "Platform", _platformService.OSDescription }
+            { "Platform", platformService.OSDescription }
         };
 
         try
         {
             RaiseEvent("Starting executable validation", properties: properties);
 
-            if (!_fileSystem.FileExists(executablePath))
+            if (!fileSystem.FileExists(executablePath))
             {
                 RaiseEvent("Executable not found", LogLevel.Error, properties: properties);
                 throw new SteamCmdValidationException($"Executable not found at {executablePath}");
             }
 
-            await using var stream = _fileSystem.OpenRead(executablePath);
+            await using var stream = fileSystem.OpenRead(executablePath);
             properties["FileSize"] = stream.Length;
 
             if (stream.Length == 0)
@@ -123,7 +114,7 @@ public class SteamCmdValidator : ISteamCmdValidator
                 throw new SteamCmdValidationException("Executable file is empty");
             }
 
-            if (_platformService.IsWindows)
+            if (platformService.IsWindows)
             {
                 var buffer = new byte[2];
                 var memory = new Memory<byte>(buffer);
@@ -145,7 +136,7 @@ public class SteamCmdValidator : ISteamCmdValidator
             }
             else
             {
-                await _platformService.SetExecutablePermissionsAsync(executablePath, cancellationToken);
+                await platformService.SetExecutablePermissionsAsync(executablePath, cancellationToken);
             }
 
             RaiseEvent("Executable validation successful", properties: properties);
@@ -194,7 +185,7 @@ public class SteamCmdValidator : ISteamCmdValidator
     private void RaiseEvent(string message, LogLevel level = LogLevel.Information,
         Exception? ex = null, Dictionary<string, object>? properties = null)
     {
-        _eventHandler.HandleEvent(new ValidationEvent
+        eventHandler.HandleEvent(new ValidationEvent
         {
             Component = ComponentName,
             Message = message,

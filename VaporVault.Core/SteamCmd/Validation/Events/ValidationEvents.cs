@@ -12,15 +12,8 @@ public record ValidationEvent
     public DateTimeOffset Timestamp { get; init; } = DateTimeOffset.UtcNow;
 }
 
-public class LoggingValidationEventHandler : IValidationEventHandler
+public class LoggingValidationEventHandler(ILogger logger) : IValidationEventHandler
 {
-    private readonly ILogger _logger;
-
-    public LoggingValidationEventHandler(ILogger logger)
-    {
-        _logger = logger;
-    }
-
     public void HandleEvent(ValidationEvent evt)
     {
         var state = new Dictionary<string, object>(evt.Properties)
@@ -29,8 +22,8 @@ public class LoggingValidationEventHandler : IValidationEventHandler
             { "Component", evt.Component }
         };
 
-        using var scope = _logger.BeginScope(state);
-        _logger.Log(
+        using var scope = logger.BeginScope(state);
+        logger.Log(
             evt.Level,
             evt.Exception,
             "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Component}] {Message}",
